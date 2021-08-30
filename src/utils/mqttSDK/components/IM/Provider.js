@@ -1,12 +1,11 @@
 import React from 'react'
 import { MqttIMClientContext } from './Context'
-import MqttSDK from '../../core/core'
+import IMClient from './IMClient'
 
 function MqttIMClientProvider({ context = null, children }) {
   const Context = context || MqttIMClientContext
 
-  const url = ''
-  const client = new MqttSDK('im', url)
+  const client = new IMClient()
 
   return <Context.Provider value={{client}}>{children}</Context.Provider>
 }

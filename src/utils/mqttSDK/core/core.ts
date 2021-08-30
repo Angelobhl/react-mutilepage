@@ -106,11 +106,17 @@ class MqttSDK {
   }
 
   // 发送消息
-  sendMessage () {}
+  sendMessage (topic: string, data: any) {
+    let msg: string = ''
 
-  // 获取会话列表
+    if (typeof data !== 'string') {
+      msg = JSON.stringify(data)
+    } else {
+      msg = data
+    }
 
-  // 获取会话
+    this.client && this.client.publish(topic, msg)
+  }
 
   // 监听消息
   on (event: string, listener: (...args: any[]) => void) {
