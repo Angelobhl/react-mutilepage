@@ -1,55 +1,111 @@
-declare interface MqttSDKOptions {
-  clientId: string,
-  username: string,
-  password: string,
-  keepalive?: number,
-  reconnectPeriod?: number
+declare namespace MqttSDKCore {
+  interface Options {
+    clientId: string,
+    username: string,
+    password: string,
+    keepalive?: number,
+    reconnectPeriod?: number
+  }
+
+  type MessageType = 'Text' | 'Tip' | 'Card' | 'IMAGE' | 'Audio' | 'Video' | 'FILE'
+
+  type MqttMainTopicCmd = 'chat' | 'err' | 'mark' | 'fetch' | 'newconv'
+  type MqttChatTopicCmd = 'chat'
+
+  interface User {
+    nickname: string,
+    avatar: string,
+    gender: number
+  }
+
+  interface Listener {
+    (...args: any[]): void
+  }
 }
 
-declare interface MqttSDKProp {
-  url: string,
-  options: MqttSDKOptions
-}
+declare namespace MqttMessage {
+  interface CommonBoby {
+    ver: string,
+    [propName: string]: any
+    extra?: {
+      [propName: string]: any
+    }
+  }
 
-declare class MqttSDK {
-  source: string
-  url: string
-  options: MqttSDKOptions
-  client: MQTT.Client | null
-  connestStatus: number
-  subscribeTopics: string[]
+  interface TextBody extends CommonBoby {
+    text: string
+  }
 
-  eventEmitter: EventEmitter
+  interface TipBoby extends CommonBoby {
+    text: string
+  }
 
-  constructor (source: string, url: string)
+  interface CardBody extends CommonBoby {
+    extra: {
+      title: string,
+      detail: string,
+      width: number,
+      height: number,
+      scheme: string,
+      [propName: string]: any
+    }
+  }
 
-  conect (options: MqttSDKOptions): void
+  interface ChatCmd {
+    cmd: 'chat',
+    data: {
+      'from_uid': number,
+      'to_uid': number,
+      sn: number,
+      'msg_type': MqttSDKCore.MessageType,
+      body: CommonBoby | TextBody | TipBoby | CardBody
+    }
+  }
 
-  close (): void
+  interface ErrCmd {
+    cmd: 'err',
+    code: number,
+    data: {
+      uid: number,
+      sn: number,
+      message: string
+    }
+  }
 
-  setConnectStatus (status: number): void
+  interface MarkCmd {
+    cmd: 'mark',
+    data: {
+      'from_uid': number,
+      'to_uid': number,
+      'msg_id': number[]
+    }
+  }
 
-  listen (): void
+  interface FetchCmdData {
+    'from_uid': number,
+    'to_uid': number,
+    body: CommonBoby | TextBody | TipBoby | CardBody
+  }
+  interface FetchUpCmd {
+    cmd: 'fetch',
+    data: {
+      uid: number,
+      page: number,
+      size: number
+    }
+  }
+  interface FetchDownCmd {
+    cmd: 'fetch',
+    data: FetchCmdData[]
+  }
 
-  subscribe (topics: string[] = []): void
-
-  unsubscribe (topic: string): void
-
-  // 收到消息
-  onMessage (topic: string, message: string): void
-
-  // 发送消息
-  sendMessage (topic: string, data: any): void
-
-  // 监听消息
-  on (event: string, listener: (...args: any[]) => void): void
-
-  // 取消监听
-  off (event: string, listener: (...args: any[]) => void): void
-
-  // 取消监听全部
-  offAll (event: string): void
-
-  // 发布消息
-  trigger (event: string, ...args: any[]): void
+  interface NewconvCmd {
+    cmd: 'newconv',
+    data: {
+      cnt: number,
+      text: string,
+      timestamp: string,
+      user: MqttSDKCore.User
+    }
+  }
 }

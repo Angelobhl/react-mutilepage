@@ -2,7 +2,7 @@ import MQTT from 'mqtt'
 import {MqttConnestStatus} from '../types/types'
 import {EventEmitter} from 'events'
 
-const DefalutProp: MqttSDKOptions = {
+const DefalutProp: MqttSDKCore.Options = {
   clientId: '',
   username: '',
   password: '',
@@ -13,7 +13,7 @@ const DefalutProp: MqttSDKOptions = {
 class MqttSDK {
   source: string = ''
   url: string = ''
-  options: MqttSDKOptions = DefalutProp
+  options: MqttSDKCore.Options = DefalutProp
   client: MQTT.Client | null = null
   connestStatus: number = MqttConnestStatus.Noconnect
   subscribeTopics: string[] = []
@@ -25,7 +25,7 @@ class MqttSDK {
     this.url = url
   }
 
-  conect (options: MqttSDKOptions) {
+  conect (options: MqttSDKCore.Options) {
     this.options = Object.assign(DefalutProp, options)
     this.client = MQTT.connect(this.url, this.options)
     this.setConnectStatus(MqttConnestStatus.Connecting)
@@ -58,20 +58,24 @@ class MqttSDK {
 
       client.on('close', () => {
         this.setConnectStatus(MqttConnestStatus.Noconnect)
+        this.trigger('mqtt/close')
       })
 
       client.on('disconnect', () => {
         this.setConnectStatus(MqttConnestStatus.Noconnect)
         this.client = null
+        this.trigger('mqtt/close')
       })
 
       client.on('error', () => {
         this.setConnectStatus(MqttConnestStatus.Noconnect)
+        this.trigger('mqtt/close')
       })
 
       client.on('end', () => {
         this.setConnectStatus(MqttConnestStatus.Noconnect)
         this.client = null
+        this.trigger('mqtt/close')
       })
 
       client.on('reconnect', () => {
@@ -119,13 +123,13 @@ class MqttSDK {
   }
 
   // 监听消息
-  on (event: string, listener: (...args: any[]) => void) {
+  on (event: string, listener: MqttSDKCore.Listener) {
     event = this.source + '/' + event
     this.eventEmitter.on(event, listener)
   }
 
   // 取消监听
-  off (event: string, listener: (...args: any[]) => void) {
+  off (event: string, listener: MqttSDKCore.Listener) {
     event = this.source + '/' + event
     this.eventEmitter.removeListener(event, listener)
   }
