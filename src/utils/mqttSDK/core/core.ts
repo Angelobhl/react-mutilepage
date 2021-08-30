@@ -1,5 +1,6 @@
 import MQTT from 'mqtt'
 import {MqttConnestStatus} from '../types/types'
+import {EventEmitter} from 'events'
 
 const DefalutProp: MqttSDKOptions = {
   clientId: '',
@@ -10,15 +11,22 @@ const DefalutProp: MqttSDKOptions = {
 }
 
 class MqttSDK {
+  source: string = ''
   url: string = ''
   options: MqttSDKOptions = DefalutProp
   client: MQTT.Client | null = null
   connestStatus: number = MqttConnestStatus.Noconnect
   subscribeTopics: string[] = []
 
-  conect (prop: MqttSDKProp) {
-    this.url = prop.url
-    this.options = Object.assign(DefalutProp, prop.options)
+  eventEmitter: EventEmitter = new EventEmitter()
+
+  constructor (source: string, url: string) {
+    this.source = source
+    this.url = url
+  }
+
+  conect (options: MqttSDKOptions) {
+    this.options = Object.assign(DefalutProp, options)
     this.client = MQTT.connect(this.url, this.options)
     this.setConnectStatus(MqttConnestStatus.Connecting)
     this.listen()
@@ -41,6 +49,7 @@ class MqttSDK {
       client.on('connect', () => {
         this.setConnectStatus(MqttConnestStatus.Connected)
         this.subscribe()
+        this.trigger('mqtt/connect')
       })
 
       client.on('message', (topic: string, message: string) => {
@@ -91,7 +100,10 @@ class MqttSDK {
   }
 
   // 收到消息
-  onMessage (topic: string, message: string) {}
+  onMessage (topic: string, message: string) {
+    const data = JSON.parse(message)
+    this.trigger(topic, data)
+  }
 
   // 发送消息
   sendMessage () {}
@@ -99,6 +111,30 @@ class MqttSDK {
   // 获取会话列表
 
   // 获取会话
+
+  // 监听消息
+  on (event: string, listener: (...args: any[]) => void) {
+    event = this.source + '/' + event
+    this.eventEmitter.on(event, listener)
+  }
+
+  // 取消监听
+  off (event: string, listener: (...args: any[]) => void) {
+    event = this.source + '/' + event
+    this.eventEmitter.removeListener(event, listener)
+  }
+
+  // 取消监听全部
+  offAll (event: string) {
+    event = this.source + '/' + event
+    this.eventEmitter.removeAllListeners(event)
+  }
+
+  // 发布消息
+  trigger (event: string, ...args: any[]) {
+    event = this.source + '/' + event
+    this.eventEmitter.emit(event, ...args)
+  }
 }
 
 export default MqttSDK

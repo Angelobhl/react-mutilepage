@@ -5,7 +5,8 @@ import MqttSDK from '../../core/core'
 function MqttIMClientProvider({ context = null, children }) {
   const Context = context || MqttIMClientContext
 
-  const client = new MqttSDK()
+  const url = ''
+  const client = new MqttSDK('im', url)
 
   return <Context.Provider value={{client}}>{children}</Context.Provider>
 }
