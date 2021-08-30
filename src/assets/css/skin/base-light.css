@@ -1,0 +1,26 @@
+@charset "UTF-8";
+/* 全局定义 */
+:root {
+  /* 主色调 */
+  --main-color: #635cf6;
+  /* 辅助色1 */
+  --auxiliary-color-1: #fd6a68;
+  /* 辅助色2 */
+  --auxiliary-color-2: #ffae31;
+  /* 辅助色3 */
+  --auxiliary-color-3: #319ffd;
+  --auxiliary-color-3-alpha: rgba(49, 159, 253, 0.06);
+  /* 一级文案 */
+  --main-text: #333333;
+  /* 次级文案 */
+  --sub-text: #666666;
+  /* 二级文案 */
+  --secondary-text: #999999;
+  /* 状态文案 */
+  --status-text: #635cf6;
+  /* 填充色 辅助色 */
+  --fill-color: #ffffff;
+  /* 模块分割 */
+  --block-space-color: #f3f3f3;
+  /* 分割线 */
+  --split-line-color: #fafafa; }

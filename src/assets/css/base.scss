@@ -1,0 +1,139 @@
+// @import './skin/base-dark.scss';
+@import './skin/base-light.scss';
+
+html {
+  height: 100%;
+}
+body {
+  font-family: PingFangSC-Regular,PingFang SC,tahoma,arial,microsoft yahei,sans-serif;
+  height: 100%;
+  background: var(--fill-color);
+  color: var(--main-text);
+  font-weight: 400;
+}
+* {
+  padding: 0;
+  margin: 0;
+}
+ol, ul {
+  list-style: none;
+}
+i {
+  font-style: normal;
+}
+input, textarea {
+  outline: none;
+}
+::-webkit-input-placeholder {
+  color: var(--secondary-text);
+}
+a {
+  color: var(--main-text);
+  text-decoration: none;
+  &:focus {
+    outline: 0;
+  }
+}
+.clearfix:after, .clearfix:before {
+  display: table;
+  line-height: 0;
+  content: "";
+}
+.clearfix {
+  &:after {
+    clear: both;
+  }
+}
+.hidden {
+  display: none!important;
+  visibility: hidden!important;
+}
+img {
+  width: auto;
+  height: auto;
+  max-width: 100%;
+  border: 0;
+  vertical-align: top;
+}
+*, :after, :before {
+  box-sizing: border-box;
+}
+.img-w {
+  display: block;
+  width: 100%;
+}
+.img-h {
+  display: block;
+  height: 100%;
+}
+.img-wh {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+.pr {
+  position: relative;
+}
+.fl {
+  float: left;
+}
+.fr {
+  float: right;
+}
+.dv {
+  display: inline-block;
+  vertical-align: middle;
+}
+.di {
+  display: inline-block;
+}
+.mask {
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,.5);
+  position: fixed;
+  left: 0;
+  top: 0;
+  z-index: 9;
+}
+.fw {
+  font-weight: 700;
+}
+
+/* 重置table */
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+.table-reset,
+.table-reset caption,
+.table-reset tbody,
+.table-reset tfoot,
+.table-reset thead,
+.table-reset tr,
+.table-reset th,
+.table-reset td {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font-size: 100%;
+  font: inherit;
+  vertical-align: baseline;
+}
+/* tab */
+.tabs {
+  .tabc {
+    display: none;
+  }
+  .active {
+    display: block;
+  }
+}
+[ms-controller], .ms-controller {
+  display: none;
+}
+
+/*  置灰 */
+.disable {
+  filter: grayscale(100%);
+}

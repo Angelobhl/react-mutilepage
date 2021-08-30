@@ -1,0 +1,263 @@
+@charset "UTF-8";
+/* 全局定义 */
+:root {
+  /* 主色调 */
+  --main-color: #635cf6;
+  /* 辅助色1 */
+  --auxiliary-color-1: #fd6a68;
+  /* 辅助色2 */
+  --auxiliary-color-2: #ffae31;
+  /* 辅助色3 */
+  --auxiliary-color-3: #319ffd;
+  --auxiliary-color-3-alpha: rgba(49, 159, 253, 0.06);
+  /* 一级文案 */
+  --main-text: #333333;
+  /* 次级文案 */
+  --sub-text: #666666;
+  /* 二级文案 */
+  --secondary-text: #999999;
+  /* 状态文案 */
+  --status-text: #635cf6;
+  /* 填充色 辅助色 */
+  --fill-color: #ffffff;
+  /* 模块分割 */
+  --block-space-color: #f3f3f3;
+  /* 分割线 */
+  --split-line-color: #fafafa; }
+
+html {
+  height: 100%; }
+
+body {
+  font-family: PingFangSC-Regular,PingFang SC,tahoma,arial,microsoft yahei,sans-serif;
+  height: 100%;
+  background: var(--fill-color);
+  color: var(--main-text);
+  font-weight: 400; }
+
+* {
+  padding: 0;
+  margin: 0; }
+
+ol, ul {
+  list-style: none; }
+
+i {
+  font-style: normal; }
+
+input, textarea {
+  outline: none; }
+
+::-webkit-input-placeholder {
+  color: var(--secondary-text); }
+
+a {
+  color: var(--main-text);
+  text-decoration: none; }
+  a:focus {
+    outline: 0; }
+
+.clearfix:after, .clearfix:before {
+  display: table;
+  line-height: 0;
+  content: ""; }
+
+.clearfix:after {
+  clear: both; }
+
+.hidden {
+  display: none !important;
+  visibility: hidden !important; }
+
+img {
+  width: auto;
+  height: auto;
+  max-width: 100%;
+  border: 0;
+  vertical-align: top; }
+
+*, :after, :before {
+  box-sizing: border-box; }
+
+.img-w {
+  display: block;
+  width: 100%; }
+
+.img-h {
+  display: block;
+  height: 100%; }
+
+.img-wh {
+  display: block;
+  width: 100%;
+  height: 100%; }
+
+.pr {
+  position: relative; }
+
+.fl {
+  float: left; }
+
+.fr {
+  float: right; }
+
+.dv {
+  display: inline-block;
+  vertical-align: middle; }
+
+.di {
+  display: inline-block; }
+
+.mask {
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  position: fixed;
+  left: 0;
+  top: 0;
+  z-index: 9; }
+
+.fw {
+  font-weight: 700; }
+
+/* 重置table */
+table {
+  border-collapse: collapse;
+  border-spacing: 0; }
+
+.table-reset,
+.table-reset caption,
+.table-reset tbody,
+.table-reset tfoot,
+.table-reset thead,
+.table-reset tr,
+.table-reset th,
+.table-reset td {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font-size: 100%;
+  font: inherit;
+  vertical-align: baseline; }
+
+/* tab */
+.tabs .tabc {
+  display: none; }
+
+.tabs .active {
+  display: block; }
+
+[ms-controller], .ms-controller {
+  display: none; }
+
+/*  置灰 */
+.disable {
+  filter: grayscale(100%); }
+
+#root {
+  height: 100%; }
+
+.login-page {
+  height: 100%;
+  position: relative;
+  overflow: hidden; }
+  .login-page .login-protocol {
+    position: fixed;
+    width: 100%;
+    height: 34px;
+    line-height: 34px;
+    bottom: 40px;
+    left: 0;
+    text-align: center;
+    font-size: 24px; }
+    .login-page .login-protocol .agree-btn {
+      display: inline-block;
+      margin-top: -6px;
+      margin-right: 10px;
+      width: 32px;
+      height: 32px;
+      background: url(../i/check-icon.png) no-repeat top left;
+      background-size: 100% 100%;
+      vertical-align: middle; }
+    .login-page .login-protocol a {
+      color: var(--status-text); }
+
+.login-form-area {
+  width: 618px;
+  margin: 190px auto 100px; }
+  .login-form-area .hd {
+    font-size: 48px;
+    font-weight: 400;
+    margin-bottom: 30px; }
+  .login-form-area .sub-hd {
+    font-size: 28px;
+    color: var(--secondary-text);
+    margin-top: 16px; }
+  .login-form-area .country-txt {
+    font-size: 28px;
+    height: 40px;
+    line-height: 40px;
+    position: relative; }
+    .login-form-area .country-txt .am-icon {
+      display: inline-block;
+      position: absolute;
+      top: -5px;
+      left: 85px;
+      width: 40px;
+      height: 40px; }
+  .login-form-area .extra-txt {
+    font-size: 28px;
+    color: var(--secondary-text);
+    margin-top: 14px; }
+  .login-form-area .extra-txt.align-right {
+    text-align: right; }
+  .login-form-area .ft {
+    text-align: right;
+    font-size: 28px;
+    margin-top: 62px;
+    font-weight: 400; }
+
+.login-btn-layer {
+  width: 640px;
+  margin: 0 auto; }
+  .login-btn-layer .login-btn {
+    width: 640px;
+    height: 80px;
+    background: #319FFD;
+    border-radius: 44px;
+    font-size: 36px;
+    color: #fff;
+    text-align: center;
+    line-height: 80px;
+    border: none; }
+  .login-btn-layer .login-btn:disabled {
+    background: #89D0FF;
+    color: #C6E7FF; }
+  .login-btn-layer .login-btn.no-bg {
+    background: none;
+    color: var(--sub-text);
+    font-size: 28px; }
+
+.login-step-panel {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: #fff;
+  z-index: 10;
+  overflow: hidden; }
+  .login-step-panel .login-form-area {
+    margin-top: 150px; }
+
+.am-list-body::before {
+  display: none !important; }
+
+.am-list-item.am-input-item {
+  height: 114px;
+  padding-left: 0; }
+
+.am-input-control,
+.am-input-label {
+  margin-top: 41px;
+  margin-bottom: 28px; }

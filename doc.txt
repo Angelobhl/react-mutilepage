@@ -1,0 +1,113 @@
+多页面项目，二次尝试
+  1、npx create-react-app multi-page-app --template typescript
+  2、npm run eject
+    添加webpack配置
+  3、参照【https://blog.csdn.net/qq_38036198/article/details/111251416】进行第一阶段的多页面配置
+    ps：该教程还有些许遗漏，具体可以调试的时候看
+    paths.js里
+      需要引入glob
+        var glob = require('glob')
+      entry处，如果使用里typescripts的话，需要
+        'src/pages/**/index.js' => 'src/pages/**/index.tsx'
+  4、参照vue，编写脚本，进一步实现多页面配置
+    新命令：
+      npm run start common
+      npm run b
+
+    修改 scripts/paths.js：
+    添加：
+    const projectName = process.argv[2]
+
+    旧：
+    const entries = getEntries('src/pages/**/index.js');
+    新：
+    const entries = getEntries('src/pages/' + projectName + '/**/index.js');
+
+    旧：
+    const indexjs = resolveModule(resolveApp, `src/pages/${name}/index`)
+    新：
+    const indexjs = resolveModule(resolveApp, `src/pages/${projectName}/${name}/index`)
+
+    添加：
+    //设定页面模板路径
+    function getIndexHtml() {
+      const indexHtmlList = {};
+      Object.keys(entries).forEach((name) => {
+        // const indexHtml = resolveModule(resolveApp, `src/pages/projectName/${name}/index.html`)
+        const indexHtml = resolveApp(`src/pages/${projectName}/${name}/index.html`)
+        indexHtmlList[name] = indexHtml;
+      })
+      return indexHtmlList;
+    }
+    const indexHtmlList = getIndexHtml()
+
+    module.exports 添加：
+    appIndexHtml: indexHtmlList,
+
+    旧：
+    appBuild: resolveApp('build'),
+    新：
+    appBuild: resolveApp('build/' + projectName),
+    或者：
+    旧：
+    const buildPath = process.env.BUILD_PATH || 'build';
+    新：
+    const buildPath = process.env.BUILD_PATH || 'build/' + projectName;
+
+    旧：
+    require(resolveApp('package.json')).homepage,
+    新：
+    projectName,
+
+
+    修改webpack.config.js：
+    旧：
+    template: paths.appHtml,
+    新：
+    template: paths.appIndexHtml[name],
+
+    与index.js同级添加一个index.html文件
+    删掉public文件夹
+
+    scripts下新建b.js
+
+    修改package.json:
+      添加命令： "b": "node scripts/b.js"
+
+
+
+
+安装postcss-px2rem-exclude、lib-flexible
+  npm install postcss-px2rem-exclude --save --legacy-peer-deps
+  npm install lib-flexible --save-dev
+  修改config/webpack.config.js
+    const px2rem=require('postcss-px2rem-exclude');
+    loader: require.resolve('postcss-loader')处的options.plugins添加：
+    px2rem({
+      remUnit: 75,
+      exclude: /node_modules/i
+    }),
+
+
+使用Ant Design Mobile of React
+  https://mobile.ant.design/docs/react/introduce-cn
+  npm install antd-mobile --save
+
+使用axios
+  npm isntall axios --save
+  以typescript形式封装axios
+    https://blog.csdn.net/qq_42033567/article/details/113244287
+
+
+父子组件之间方法的调用
+  父 =》 子
+    使用Ref
+  子 =》 父
+    使用props
+
+使用router
+
+
+
+使用mqtt
+  npm install mqtt --save
