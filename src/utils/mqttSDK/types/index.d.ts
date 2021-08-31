@@ -53,22 +53,29 @@ declare namespace MqttMessage {
 
   interface CommonCmdBoby {
     cmd: MqttSDKCore.MqttMainTopicCmd | MqttSDKCore.MqttChatTopicCmd,
+    direct: number,
+    time?: number,
     [propName: string]: any
   }
 
   interface ChatCmd {
     cmd: 'chat',
+    direct: number,
+    time?: number,
     data: {
       'from_uid': number,
       'to_uid': number,
       sn: number,
       'msg_type': MqttSDKCore.MessageType,
-      body: CommonBoby | TextBody | TipBoby | CardBody
+      body: CommonBoby | TextBody | TipBoby | CardBody,
+      time?: number
     }
   }
 
   interface ErrCmd {
     cmd: 'err',
+    direct: number,
+    time?: number,
     code: number,
     data: {
       uid: number,
@@ -79,6 +86,8 @@ declare namespace MqttMessage {
 
   interface MarkCmd {
     cmd: 'mark',
+    direct: number,
+    time?: number,
     data: {
       'from_uid': number,
       'to_uid': number,
@@ -93,6 +102,8 @@ declare namespace MqttMessage {
   }
   interface FetchUpCmd {
     cmd: 'fetch',
+    direct: number,
+    time?: number,
     data: {
       uid: number,
       page: number,
@@ -101,11 +112,15 @@ declare namespace MqttMessage {
   }
   interface FetchDownCmd {
     cmd: 'fetch',
+    direct: number,
+    time?: number,
     data: FetchCmdData[]
   }
 
   interface NewconvCmd {
     cmd: 'newconv',
+    direct: number,
+    time?: number,
     data: {
       cnt: number,
       text: string,

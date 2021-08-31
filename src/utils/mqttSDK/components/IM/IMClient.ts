@@ -95,6 +95,7 @@ class IMClient {
   fetchHistory (toUid: number, page: number = 1) {
     const data: MqttMessage.FetchUpCmd = {
       cmd: 'fetch',
+      direct: 0,
       data: {uid: toUid, page: page, size: 10}
     }
     this.core.sendMessage(this.mainTopic, data)
@@ -104,6 +105,7 @@ class IMClient {
   readedFlagMark (toUid: number, msgId: number[]) {
     const data: MqttMessage.MarkCmd = {
       cmd: 'mark',
+      direct: 0,
       data: {
         'from_uid': this.uid,
         'to_uid': toUid,
@@ -128,6 +130,7 @@ class IMClient {
   sendChatMsg (toUid: number, msgBody: MqttMessage.TextBody, type: MqttSDKCore.MessageType) {
     const messageData: MqttMessage.ChatCmd = {
       cmd: 'chat',
+      direct: 0,
       data: {
         'from_uid': this.uid,
         'to_uid': toUid,
