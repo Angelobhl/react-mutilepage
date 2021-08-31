@@ -4,22 +4,24 @@ import { AxiosPromise } from 'axios'
 
 class IMClient {
   core: MqttSDK
-  url: string = ''
+  url: string = 'ws://beta-mqtt.zhanqi.com:18884/ws'
   uid: number = 0
   mainTopic: string = ''
   http: HttpRequest = new HttpRequest('')
   curChatOpend: number[] = []
+
+  chatList: MqttMessage.ChatListItem[] = []
 
   constructor () {
     this.core = new MqttSDK('client', this.url)
   }
 
   listen () {
-    this.core.on('mqtt/connect', this.hanldeConnect)
-    this.core.on('mqtt/close', this.hanldeClose)
+    this.core.on('mqtt/connect', this.hanldeConnect.bind(this))
+    this.core.on('mqtt/close', this.hanldeClose.bind(this))
 
     // 监听系统topic下行消息
-    this.core.on(this.mainTopic, this.hanleMainMsg)
+    this.core.on(this.mainTopic, this.hanleMainMsg.bind(this))
   }
 
   hanldeConnect () {}
@@ -27,16 +29,23 @@ class IMClient {
   hanldeClose () {
     // 结束当前全部聊天
     while (this.curChatOpend.length) {
-      this.chatEnd(this.curChatOpend[0])
+      this.chatEnd(this.curChatOpend.pop() as number)
     }
-    this.core.off('mqtt/connect', this.hanldeConnect)
-    this.core.off(this.mainTopic, this.hanleMainMsg)
+    this.core.off('mqtt/connect', this.hanldeConnect.bind(this))
+    this.core.off('mqtt/close', this.hanldeClose.bind(this))
+    this.core.off(this.mainTopic, this.hanleMainMsg.bind(this))
     this.core.unsubscribe(this.mainTopic)
   }
 
   // 再进一步广播收到的系统交互topic消息
-  hanleMainMsg (data: any) {
+  hanleMainMsg (data: MqttMessage.CommonCmdBoby) {
+    console.log('IMClient hanleMainMsg', data)
     this.core.eventEmitter.emit(`${this.mainTopic}/${data.cmd}`, data)
+
+    /// todo
+    if (data.cmd === 'newconv') {
+      this.chatList.push({})
+    }
   }
 
   conect (uid: number, opts: MqttSDKCore.Options) {
@@ -52,11 +61,17 @@ class IMClient {
   }
 
   // 获取历史消息队列
-  getHistoryLists (): AxiosPromise<ResponseData> {
-    return this.http.request({
+  async getHistoryLists (): Promise<MqttMessage.ChatListItem[]> {
+    const {data: {code, data}} = await (this.http.request({
       url: '',
       method: 'GET'
-    })
+    }) as AxiosPromise<ResponseData>)
+
+    if (code === 0) {
+      this.chatList = data
+    }
+
+    return this.chatList
   }
 
   // 开始聊天
@@ -108,7 +123,7 @@ class IMClient {
       text: content
     }
 
-    this.sendChatMsg(toUid, msgBody, 'Text')
+    this.sendChatMsg(toUid, msgBody, 'TEXT')
   }
   sendChatMsg (toUid: number, msgBody: MqttMessage.TextBody, type: MqttSDKCore.MessageType) {
     const messageData: MqttMessage.ChatCmd = {

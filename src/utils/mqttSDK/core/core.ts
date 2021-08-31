@@ -91,7 +91,11 @@ class MqttSDK {
     if (this.client && this.connestStatus === MqttConnestStatus.Connected) {
       let topic: string
       for (topic of this.subscribeTopics) {
-        this.client.subscribe(topic)
+        console.log('core subscribe', topic)
+        const s = topic
+        this.client.subscribe(topic, (e) => {
+          console.log('core subscribe result', s, e)
+        })
       }
       this.subscribeTopics = []
     }
@@ -119,6 +123,7 @@ class MqttSDK {
       msg = data
     }
 
+    console.log('core sendMessage', topic, data, msg)
     this.client && this.client.publish(topic, msg)
   }
 
@@ -143,6 +148,7 @@ class MqttSDK {
   // 发布消息
   trigger (event: string, ...args: any[]) {
     event = this.source + '/' + event
+    console.log('core trigger', event, ...args)
     this.eventEmitter.emit(event, ...args)
   }
 }
