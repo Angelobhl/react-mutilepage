@@ -22,9 +22,8 @@ declare namespace MqttSDKCore {
    */
   interface User {
     nickname: string,
-    avatar: string,
-    gender: number,
     avatar: string
+    gender: number,
   }
 
   /**
